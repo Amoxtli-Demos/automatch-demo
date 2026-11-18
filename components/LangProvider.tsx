@@ -16,7 +16,13 @@ const Ctx = createContext<LangCtx | null>(null);
 export function LangProvider({ children, initialLang = "nl" }: { children: React.ReactNode; initialLang?: Lang }) {
   // First visit: Dutch (the client's original language). After that: the last language picked (cookie, read on the server).
   const [lang, setLangState] = useState<Lang>(initialLang);
-  const setLang = useCallback((l: Lang) => { persistLang(l); setLangState(l); }, []);
+  const setLang = useCallback((l: Lang) => {
+    persistLang(l);
+    setLangState(l);
+    // each language has its own indexable URL: "/" (nl), "/en", "/es" — update it without remounting the page
+    const path = l === "nl" ? "/" : `/${l}`;
+    if (window.location.pathname !== path) window.history.replaceState(window.history.state, "", path + window.location.hash);
+  }, []);
 
   const t = useCallback((k: string) => {
     const v = T[lang][k] ?? T.nl[k];

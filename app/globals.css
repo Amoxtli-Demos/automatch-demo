@@ -16,7 +16,7 @@ html{-webkit-text-size-adjust:100%}
 html:not(.has-gsap){scroll-behavior:smooth}
 html.lenis,html.lenis body{height:auto}
 .lenis.lenis-smooth{scroll-behavior:auto!important}
-body{margin:0;font-family:"Outfit Variable","Outfit",system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--text);background:var(--paper);font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:clip}
+body{margin:0;font-family:var(--font-outfit),system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--text);background:var(--paper);font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:clip}
 img{max-width:100%;height:auto;display:block}
 h1,h2,h3{color:var(--ink);font-weight:600;letter-spacing:-.035em;line-height:1;margin:0}
 p{margin:0}
@@ -175,7 +175,7 @@ header.site.hide{transform:translateY(-110%)}
 .iris{position:absolute;inset:0;z-index:20;background:var(--navy);clip-path:circle(0% at 70% 40%);display:none;align-items:center}
 .has-gsap .iris{display:flex}
 .iris-in{width:100%;height:100%;display:flex;flex-direction:column;justify-content:center;padding:var(--s9) 8vw 26vh;color:#C9D3DD}
-.iris h2{color:#fff}
+.iris h2,.iris-title{color:#fff;font-weight:600;letter-spacing:-.055em;line-height:.92;margin:0}
 .iris .sub{max-width:28em;margin-top:28px;font-size:clamp(1.05rem,1.4vw,1.3rem);color:#AEBBC8}
 .has-gsap.iris-on #about{margin-top:-100vh;z-index:3}
 .has-gsap.iris-on #home{z-index:1}

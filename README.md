@@ -6,7 +6,7 @@ Rediseño demo de [automatchnl.com](https://automatchnl.com) preparado por AMOXT
 
 - **Next.js 16** (App Router) + **React 19** + **TypeScript**
 - **GSAP 3 + ScrollTrigger** para la coreografía de scroll y **Lenis** para el scroll suave
-- **Outfit** (fuente original) servida localmente con `@fontsource-variable/outfit`
+- **Outfit** (fuente original) servida localmente con `next/font/local`
 - CSS propio con tokens de diseño (`app/globals.css`); sin framework de componentes
 
 ## Scripts
@@ -23,39 +23,66 @@ npm run lint    # comprobación de tipos
 
 ```
 app/
-  layout.tsx       metadatos, script previo al primer pintado (modo de intro)
-  page.tsx         composición de secciones + JSON-LD
-  globals.css      tokens (cuadrícula 8pt) y estilos
-  icon.png         favicon original de AutoMatch (+ apple-icon.png)
-components/
-  LangProvider     idioma: primera visita en neerlandés; luego el último elegido (cookie am-lang, leída en el servidor)
-  PlannerProvider  estado del planeador (persistido en localStorage)
-  Header           menú, scroll-spy, menú móvil, CTA fijo en móvil
-  Hero             título, ilustración de Robin, "iris" hacia el recorrido
-  Drive            "Hoe werkt het?" como recorrido horizontal fijado
-  Why · Services · Reviews · Planner · Footer
-  Motion           GSAP + ScrollTrigger + Lenis (se cargan tras el primer pintado)
+  [lang]/layout.tsx   layout raíz por idioma: <html lang>, metadatos, fuente, script previo al primer pintado
+  [lang]/page.tsx     composición de secciones + JSON-LD por idioma
+  robots.ts · sitemap.ts · manifest.ts
+  icon.png · apple-icon.png   favicon original de AutoMatch
+  fonts/              Outfit (variable, OFL) servida con next/font/local
+  globals.css         tokens (cuadrícula 8 pt) y estilos
+proxy.ts              "/" = neerlandés (rewrite a /nl), /nl → 308 a "/", visitantes con idioma guardado → /en o /es
+components/           Header, Hero, Drive, Why, Services, Reviews, Planner, Footer, Motion…
 lib/
-  i18n.ts          textos NL / EN / ES, reseñas y paquetes
-  scroll.ts        estado compartido de movimiento y helpers de scroll
-public/img/        ilustraciones de Robin y del globo
+  i18n.ts             textos NL / EN / ES, reseñas y paquetes
+  seo.ts              títulos, descripciones, palabras clave, metadatos y JSON-LD por idioma
+  lang-cookie.ts      cookie am-lang (último idioma elegido)
+  scroll.ts           estado compartido de movimiento y helpers de scroll
+public/og/            imágenes para compartir 1200×630 por idioma
+public/icons/         iconos del manifest
 ```
 
-## Decisiones
+## Idiomas y URLs
 
-- **Rendimiento:** la intro del hero es CSS puro y las librerías de movimiento se importan después del primer pintado y en tiempo ocioso, así no bloquean el LCP. El loader solo aparece en escritorio, una vez por sesión.
-- **Accesibilidad:** áreas táctiles de 44 px o más, foco visible, `prefers-reduced-motion` respetado (sin secciones fijadas; el recorrido se apila en vertical).
-- **Espaciado:** cuadrícula de 8 pt con ajustes de 4 pt y márgenes laterales de 16 / 24 / 48 px, siguiendo [ehmo/platform-design-skills](https://github.com/ehmo/platform-design-skills) (Apple HIG + WCAG 2.2).
-- **SEO:** metadatos, Open Graph y JSON-LD (`LocalBusiness` con los precios reales). Esta demo lleva `noindex` para no competir con el sitio en producción; quitarlo en `app/layout.tsx` al publicar.
+| Idioma | URL | Notas |
+|---|---|---|
+| Neerlandés | `/` | Idioma por defecto y `x-default`. `/nl` redirige aquí. |
+| Inglés | `/en` | |
+| Español | `/es` | |
 
-## Lighthouse (build de producción, local)
+La primera visita siempre abre en neerlandés. Al cambiar de idioma se guarda en la cookie `am-lang` y la URL cambia sin recargar; al volver a `/`, el visitante va a su último idioma. Los buscadores (sin cookie) siempre ven neerlandés en `/`.
 
-| | Rendimiento | Accesibilidad | Buenas prácticas | SEO |
+## Diseño y rendimiento
+
+- Intro del hero en CSS puro; GSAP, ScrollTrigger y Lenis se importan después del primer pintado y su configuración se arma por etapas. Loader solo en escritorio, una vez por sesión.
+- `prefers-reduced-motion`: sin secciones fijadas, el recorrido se apila en vertical.
+- Cuadrícula de 8 pt con ajustes de 4 pt, márgenes 16 / 24 / 48 px y áreas táctiles de 44 px o más, siguiendo [ehmo/platform-design-skills](https://github.com/ehmo/platform-design-skills) (Apple HIG + WCAG 2.2).
+
+## SEO
+
+- **Metadatos por idioma** (`lib/seo.ts`): título 53–60 caracteres, descripción 149–158, palabras clave por intención de búsqueda, canonical, `hreflang` (nl, en, es, x-default), Open Graph y Twitter con imagen propia 1200×630.
+- **Datos estructurados** (un `@graph` con `@id` estables): `AutomotiveBusiness`, tres `Service` con su `Offer` en EUR, `WebSite` y `WebPage` con `inLanguage`. Solo datos publicados por el cliente; sin valoraciones ni reseñas marcadas (Google no admite reseñas propias del negocio).
+- **Rastreo:** `robots.txt`, `sitemap.xml` con alternativas por idioma y `manifest.webmanifest`.
+- **Contenido:** un solo `h1` por página, jerarquía `h2`/`h3` sin saltos, `lang` en cada reseña, `alt` en todas las imágenes.
+- **Indexación opt-in:** con `SITE_INDEXABLE=true` el sitio se indexa; sin esa variable (previews, demo) va con `noindex` y `robots.txt` bloquea todo. Ver `.env.example`.
+
+## Lighthouse (build de producción local, `SITE_INDEXABLE=true`)
+
+| Página | Rendimiento | Accesibilidad | Buenas prácticas | SEO |
 |---|---|---|---|---|
-| Móvil | 93 | 100 | 100 | 63* |
-| Escritorio | 98 | 100 | 100 | 63* |
+| `/` móvil | 86–89 | 100 | 100 | 100 |
+| `/en` móvil | 93 | 100 | 100 | 100 |
+| `/es` móvil | 97 | 100 | 100 | 100 |
+| `/` escritorio | 98 | 100 | 100 | 100 |
 
-\* Solo por el `noindex` intencional de la demo; sin él da 100.
+CLS 0 en todas. El rendimiento móvil varía entre corridas por la simulación de red/CPU de Lighthouse; en `/` el LCP es la ilustración de Robin (22 KB, precargada).
+
+## Después de publicar
+
+1. Configurar `NEXT_PUBLIC_SITE_URL` y `SITE_INDEXABLE=true` en producción.
+2. Alta en Google Search Console (opcional: `NEXT_PUBLIC_GSC_VERIFICATION`), enviar `sitemap.xml` y pedir indexación de `/`, `/en` y `/es`.
+3. Crear o reclamar el perfil de Google Business con el mismo nombre y zona de servicio, y enlazar el sitio.
+4. Analítica (GA4 o similar) midiendo la acción principal: envío del planeador y clic en contacto.
+5. Pedir reseñas reales en Google a los clientes que ya dieron testimonio.
+6. Contenido futuro: una página por servicio y guías para expats (por ejemplo, cómo comprar un auto usado en Países Bajos), cada una con su propio título, descripción y `h1`.
 
 ## Pendiente para la versión real
 

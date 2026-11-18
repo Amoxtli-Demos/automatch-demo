@@ -67,7 +67,7 @@ export function Hero() {
       </div>
       <div className="iris" aria-hidden="true">
         <div className="iris-in">
-          <h2 className="display">{t("how.title")}</h2>
+          <p className="display iris-title">{t("how.title")}</p>
           <p className="sub">{t("how.sub")}</p>
           <div className="ride-hint">
             <svg viewBox="0 0 44 22" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round"><path className="arrowline" d="M2 11h34" /><path d="M32 5l7 6-7 6" /></svg>

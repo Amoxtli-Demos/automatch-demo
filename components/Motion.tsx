@@ -83,6 +83,34 @@ export function Motion() {
         });
       };
 
+      /* language changes swap text nodes: re-arm the scrubbed statement and any new reveal targets */
+      const onLang = () => requestAnimationFrame(() => {
+        $$("#revGrid .rev").forEach((el) => el.classList.add("shown"));
+        statementScrub();
+        revealOnScroll();
+        ScrollTrigger.refresh();
+      });
+      window.addEventListener("am:lang", onLang);
+      const onFonts = () => ScrollTrigger.refresh();
+      document.fonts?.ready.then(onFonts).catch(() => {});
+
+      cleanup = () => {
+        window.removeEventListener("am:lang", onLang);
+        listeners.forEach((f) => f());
+        stmtTween?.kill();
+        mm.revert();
+        ctx.revert();
+        ScrollTrigger.getAll().forEach((s) => s.kill());
+        gsap.ticker.remove(raf);
+        lenis.destroy();
+        motionState.lenis = null;
+        motionState.ready = false;
+        root.classList.remove("hz", "iris-on");
+        $$<Revealable>("[data-split],[data-reveal],[data-clip]").forEach((el) => { delete el._st; });
+      };
+
+      /* build in stages, yielding between them, so setup never blocks input for long */
+      const yieldTask = () => new Promise<void>((r) => setTimeout(r, 0));
       ctx.add(() => {
         /* hero: pinned iris opening from Robin's key into the drive (tablet / desktop) */
         mm.add("(min-width: 901px)", () => {
@@ -112,7 +140,11 @@ export function Motion() {
         mm.add("(max-width: 900px)", () => {
           gsap.to("#robinWrap", { yPercent: 10, ease: "none", scrollTrigger: { trigger: "#home", start: "top top", end: "bottom top", scrub: true } });
         });
+      });
+      await yieldTask();
+      if (cancelled) return;
 
+      ctx.add(() => {
         /* the drive: horizontal pinned track */
         root.classList.add("hz");
         const track = $("#track")!, car = $("#car")!, speed = $("#speed")!, body = $("#carBody")!;
@@ -145,6 +177,11 @@ export function Motion() {
           ScrollTrigger.create({ trigger: panel, containerAnimation: drive, start: "left 30%", onToggle: (s) => signs[i]?.classList.toggle("on", s.isActive) });
         });
 
+      });
+      await yieldTask();
+      if (cancelled) return;
+
+      ctx.add(() => {
         /* why: globe roll */
         gsap.fromTo("#globe", { rotation: -18, scale: 0.92 }, { rotation: 22, scale: 1.04, ease: "none", scrollTrigger: { trigger: "#why", start: "top bottom", end: "bottom top", scrub: true } });
 
@@ -155,6 +192,11 @@ export function Motion() {
           gsap.fromTo(c, { scale: 1, "--dim": 0 }, { scale: 0.92 + i * 0.02, "--dim": 0.12, ease: "none", scrollTrigger: { trigger: cards[i + 1], start: "top bottom", end: "top 30%", scrub: true } });
         });
 
+      });
+      await yieldTask();
+      if (cancelled) return;
+
+      ctx.add(() => {
         /* reviews: marquees */
         gsap.fromTo("#mq1", { xPercent: 0 }, { xPercent: -28, ease: "none", scrollTrigger: { trigger: "#reviews", start: "top bottom", end: "bottom top", scrub: true } });
         gsap.fromTo("#mq2", { xPercent: -28 }, { xPercent: 0, ease: "none", scrollTrigger: { trigger: "#reviews", start: "top bottom", end: "bottom top", scrub: true } });
@@ -166,31 +208,6 @@ export function Motion() {
         statementScrub();
       });
 
-      /* language changes swap text nodes: re-arm the scrubbed statement and any new reveal targets */
-      const onLang = () => requestAnimationFrame(() => {
-        $$("#revGrid .rev").forEach((el) => el.classList.add("shown"));
-        statementScrub();
-        revealOnScroll();
-        ScrollTrigger.refresh();
-      });
-      window.addEventListener("am:lang", onLang);
-      const onFonts = () => ScrollTrigger.refresh();
-      document.fonts?.ready.then(onFonts).catch(() => {});
-
-      cleanup = () => {
-        window.removeEventListener("am:lang", onLang);
-        listeners.forEach((f) => f());
-        stmtTween?.kill();
-        mm.revert();
-        ctx.revert();
-        ScrollTrigger.getAll().forEach((s) => s.kill());
-        gsap.ticker.remove(raf);
-        lenis.destroy();
-        motionState.lenis = null;
-        motionState.ready = false;
-        root.classList.remove("hz", "iris-on");
-        $$<Revealable>("[data-split],[data-reveal],[data-clip]").forEach((el) => { delete el._st; });
-      };
     }
 
     /* after first paint + idle: keeps the motion stack off the critical rendering path */
