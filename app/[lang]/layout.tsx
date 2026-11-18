@@ -44,7 +44,9 @@ export default async function RootLayout({ children, params }: { children: React
   const { lang } = await params;
   if (!LOCALES.includes(lang as Lang)) notFound();
   return (
-    <html lang={lang} className={outfit.variable} suppressHydrationWarning>
+    // translate="no": the site ships its own NL/EN/ES translations; browser auto-translation
+    // would re-translate them word by word (and break the split headline animation).
+    <html lang={lang} className={outfit.variable} translate="no" suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: prePaint }} />
       </head>

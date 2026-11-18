@@ -87,6 +87,7 @@ export function buildMetadata(lang: Lang): Metadata {
       images: [{ url: `/og/${lang}.jpg`, alt: s.ogAlt }],
     },
     formatDetection: { telephone: false, email: false, address: false },
+    other: { google: "notranslate" },
     verification: process.env.NEXT_PUBLIC_GSC_VERIFICATION ? { google: process.env.NEXT_PUBLIC_GSC_VERIFICATION } : undefined,
   };
 }
