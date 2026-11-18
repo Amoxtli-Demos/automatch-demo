@@ -26,7 +26,7 @@ export function LangSwitch({ visible = true }: { visible?: boolean }) {
   }, [lang, visible]);
 
   return (
-    <div className="lang" role="group" aria-label="Taal / Language / Idioma" ref={wrap}>
+    <div className="lang notranslate" translate="no" role="group" aria-label="Taal / Language / Idioma" ref={wrap}>
       <span className="pill" aria-hidden="true" ref={pill} />
       {LANGS.map((l) => (
         <button key={l} type="button" data-lang={l} aria-pressed={lang === l} onClick={() => setLang(l)}>

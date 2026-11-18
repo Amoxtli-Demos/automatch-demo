@@ -91,7 +91,7 @@ export function Header() {
     <>
       <header className={cls} id="top">
         <div className="wrap nav">
-          <a className="logo" href="#home" aria-label="AutoMatch">AutoMatch</a>
+          <a className="logo notranslate" translate="no" href="#home" aria-label="AutoMatch">AutoMatch</a>
           <ul className="menu" role="list">
             {NAV.map((n) => (
               <li key={n.href}>

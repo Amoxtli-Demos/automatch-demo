@@ -21,11 +21,11 @@ export function Footer() {
           <a href="#reviews">{t("nav.reviews")}</a>
         </nav>
         <div className="bottom">
-          <span>© Copyright 2025. All Rights Reserved by AutoMatch</span>
+          <span>© Copyright 2025. All Rights Reserved by <span translate="no" className="notranslate">AutoMatch</span></span>
           <LangSwitch />
         </div>
       </div>
-      <div className="wordmark" id="wordmark" aria-hidden="true">
+      <div className="wordmark notranslate" translate="no" id="wordmark" aria-hidden="true">
         {"AutoMatch".split("").map((ch, i) => (<span key={i} className={"ch" + (i >= 4 ? " g" : "")}>{ch}</span>))}
       </div>
     </footer>

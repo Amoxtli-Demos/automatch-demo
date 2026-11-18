@@ -3,7 +3,7 @@ export function Loader() {
   return (
     <div id="loader" aria-hidden="true">
       <div className="inner">
-        <div className="brand"><span>AutoMatch</span></div>
+        <div className="brand notranslate" translate="no"><span>AutoMatch</span></div>
         <div className="lane"><i /></div>
       </div>
     </div>
