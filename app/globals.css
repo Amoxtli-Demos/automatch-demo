@@ -478,3 +478,9 @@ footer .lang button[aria-pressed="true"]{color:var(--ink)}
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:0s!important;animation-iteration-count:1!important;transition-duration:0s!important;transition-delay:0s!important}
 }
+
+/* background-clip:text only paints inside the box; tight tracking lets the last glyph overhang it.
+   Pad the painted box and give the space back so layout is unchanged. */
+.grad-text{padding:0 .1em;margin:0 -.1em}
+.has-gsap.hz .big{padding-right:.12em;margin-right:-.12em}
+.wordmark .ch.g{padding-right:.08em;margin-right:-.08em}
