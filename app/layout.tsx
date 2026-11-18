@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import "@fontsource-variable/outfit";
 import "./globals.css";
+import { cookies } from "next/headers";
+import { LANG_COOKIE, parseLang } from "@/lib/lang-cookie";
 
 const SITE = process.env.NEXT_PUBLIC_SITE_URL ?? "https://automatchnl.com";
 
@@ -37,9 +39,10 @@ export const viewport: Viewport = {
  */
 const prePaint = `(function(){var d=document.documentElement,r=matchMedia('(prefers-reduced-motion: reduce)').matches;if(!r)d.classList.add('has-gsap');d.classList.add('hero-css');var s=false;try{s=sessionStorage.getItem('am-intro')==='1'}catch(e){}if(!r&&innerWidth>900&&!s){d.classList.add('use-loader');try{sessionStorage.setItem('am-intro','1')}catch(e){}setTimeout(function(){d.classList.remove('use-loader');d.style.setProperty('--intro','1.25s')},1900)}})();`;
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const lang = parseLang((await cookies()).get(LANG_COOKIE)?.value);
   return (
-    <html lang="nl" suppressHydrationWarning>
+    <html lang={lang} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: prePaint }} />
       </head>

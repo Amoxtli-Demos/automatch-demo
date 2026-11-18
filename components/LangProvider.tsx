@@ -2,6 +2,7 @@
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { T, type Lang } from "@/lib/i18n";
+import { persistLang } from "@/lib/lang-cookie";
 
 type LangCtx = {
   lang: Lang;
@@ -12,9 +13,10 @@ type LangCtx = {
 
 const Ctx = createContext<LangCtx | null>(null);
 
-export function LangProvider({ children }: { children: React.ReactNode }) {
-  // The site always opens in Dutch (the client's original language).
-  const [lang, setLangState] = useState<Lang>("nl");
+export function LangProvider({ children, initialLang = "nl" }: { children: React.ReactNode; initialLang?: Lang }) {
+  // First visit: Dutch (the client's original language). After that: the last language picked (cookie, read on the server).
+  const [lang, setLangState] = useState<Lang>(initialLang);
+  const setLang = useCallback((l: Lang) => { persistLang(l); setLangState(l); }, []);
 
   const t = useCallback((k: string) => {
     const v = T[lang][k] ?? T.nl[k];
@@ -32,7 +34,7 @@ export function LangProvider({ children }: { children: React.ReactNode }) {
     window.dispatchEvent(new CustomEvent("am:lang", { detail: lang }));
   }, [lang, t]);
 
-  const value = useMemo(() => ({ lang, setLang: setLangState, t, tl }), [lang, t, tl]);
+  const value = useMemo(() => ({ lang, setLang, t, tl }), [lang, setLang, t, tl]);
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }
 

@@ -28,7 +28,7 @@ app/
   globals.css      tokens (cuadrícula 8pt) y estilos
   icon.png         favicon original de AutoMatch (+ apple-icon.png)
 components/
-  LangProvider     idioma (siempre abre en neerlandés) y diccionarios
+  LangProvider     idioma: primera visita en neerlandés; luego el último elegido (cookie am-lang, leída en el servidor)
   PlannerProvider  estado del planeador (persistido en localStorage)
   Header           menú, scroll-spy, menú móvil, CTA fijo en móvil
   Hero             título, ilustración de Robin, "iris" hacia el recorrido

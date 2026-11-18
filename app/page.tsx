@@ -1,4 +1,6 @@
+import { cookies } from "next/headers";
 import { LangProvider } from "@/components/LangProvider";
+import { LANG_COOKIE, parseLang } from "@/lib/lang-cookie";
 import { PlannerProvider } from "@/components/PlannerProvider";
 import { Loader } from "@/components/Loader";
 import { Header } from "@/components/Header";
@@ -44,9 +46,10 @@ const jsonLd = {
   ],
 };
 
-export default function Page() {
+export default async function Page() {
+  const initialLang = parseLang((await cookies()).get(LANG_COOKIE)?.value);
   return (
-    <LangProvider>
+    <LangProvider initialLang={initialLang}>
       <PlannerProvider>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
         <div className="grain" aria-hidden="true" />
