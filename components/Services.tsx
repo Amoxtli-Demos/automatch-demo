@@ -79,7 +79,10 @@ export function Services() {
     <section className="services" id="service">
       <div className="wrap">
         <div className="svc-head">
-          <h2 className="display-2" data-split=""><SplitWords text={t("svc.title")} /></h2>
+          <div>
+            <span className="eyebrow" data-reveal="">{t("nav.services")}</span>
+            <h2 className="display-2" data-split=""><SplitWords text={t("svc.title")} /></h2>
+          </div>
           <Quiz />
         </div>
         <div className="stack" id="stack">
