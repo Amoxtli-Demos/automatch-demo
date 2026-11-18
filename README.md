@@ -26,7 +26,7 @@ app/
   layout.tsx       metadatos, script previo al primer pintado (modo de intro)
   page.tsx         composición de secciones + JSON-LD
   globals.css      tokens (cuadrícula 8pt) y estilos
-  icon.svg
+  icon.png         favicon original de AutoMatch (+ apple-icon.png)
 components/
   LangProvider     idioma (siempre abre en neerlandés) y diccionarios
   PlannerProvider  estado del planeador (persistido en localStorage)
