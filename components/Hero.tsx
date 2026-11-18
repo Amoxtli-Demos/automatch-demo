@@ -20,6 +20,9 @@ export function Hero() {
   const d = (i: number) => ({ ["--d" as string]: `${0.45 + i * 0.12}s` }) as React.CSSProperties;
 
   return (
+    // The wrapper is ScrollTrigger's pin spacer: pinning never moves the hero in the DOM,
+    // so its CSS intro animations are not restarted when motion boots.
+    <div className="pin-holder" id="homeSpacer">
     <section className="hero" id="home">
       <div className="wrap hero-grid">
         <div className="hero-copy">
@@ -77,5 +80,6 @@ export function Hero() {
         <div className="road" style={{ display: "block", position: "absolute", left: 0, right: 0, bottom: 0, height: "24vh", background: "var(--asphalt)" }} />
       </div>
     </section>
+    </div>
   );
 }

@@ -13,6 +13,7 @@ const STEPS = [
 export function Drive() {
   const { t } = useLang();
   return (
+    <div className="pin-holder" id="aboutSpacer">
     <section className="how" id="about" aria-labelledby="howTitle">
       <div className="track" id="track">
         <div className="road" aria-hidden="true" />
@@ -56,5 +57,6 @@ export function Drive() {
         </svg>
       </div>
     </section>
+    </div>
   );
 }

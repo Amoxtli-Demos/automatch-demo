@@ -121,7 +121,7 @@ export function Motion() {
           };
           const tl = gsap.timeline({
             scrollTrigger: {
-              trigger: hero, start: "top top", end: "+=110%", pin: true, scrub: 0.4, invalidateOnRefresh: true,
+              trigger: hero, start: "top top", end: "+=110%", pin: true, pinSpacer: "#homeSpacer", scrub: 0.4, invalidateOnRefresh: true,
               onUpdate: (s) => { motionState.heroDark = s.progress > 0.62; },
               onLeave: () => gsap.set("#about", { autoAlpha: 1 }),
               onEnterBack: () => gsap.set("#about", { autoAlpha: 0 }),
@@ -156,7 +156,7 @@ export function Motion() {
           x: () => -(track.scrollWidth - window.innerWidth), ease: "none",
           scrollTrigger: {
             trigger: "#about", start: "top top", end: () => "+=" + (track.scrollWidth - window.innerWidth) * 1.15,
-            pin: true, scrub: true, invalidateOnRefresh: true, anticipatePin: 1,
+            pin: true, pinSpacer: "#aboutSpacer", scrub: true, invalidateOnRefresh: true, anticipatePin: 1,
             onUpdate: (s) => {
               const p = s.progress, dist = (track.scrollWidth - window.innerWidth) * p;
               gsap.set(wheels, { rotation: (dist / (Math.PI * 30)) * 360 * 0.35 });
