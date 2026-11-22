@@ -140,9 +140,9 @@ export const REVIEWS: Review[] = [
 export const PKG: Record<PkgId, { k: string; price: number | null }> = {search:{k:"p1.t",price:120},advice:{k:"p2.t",price:150},premium:{k:"p3.t",price:250},unsure:{k:"f.unsure",price:null}};
 
 const EXTRA: Record<Lang, Dict> = {
-  nl: { "how.hint": "Scroll en rij mee" },
-  en: { "how.hint": "Scroll to ride along" },
-  es: { "how.hint": "Haz scroll y acompáñame" },
+  nl: { "how.hint": "Scroll en rij mee", "foot.by": "Ontwikkeld door" },
+  en: { "how.hint": "Scroll to ride along", "foot.by": "Developed by" },
+  es: { "how.hint": "Haz scroll y acompáñame", "foot.by": "Desarrollado por" },
 };
 (Object.keys(EXTRA) as Lang[]).forEach((l) => Object.assign(T[l], EXTRA[l]));
 

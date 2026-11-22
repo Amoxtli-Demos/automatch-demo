@@ -21,7 +21,13 @@ export function Footer() {
           <a href="#reviews">{t("nav.reviews")}</a>
         </nav>
         <div className="bottom">
-          <span>© Copyright 2025. All Rights Reserved by <span translate="no" className="notranslate">AutoMatch</span></span>
+          <div className="legal">
+            <span>© Copyright 2025. All Rights Reserved by <span translate="no" className="notranslate">AutoMatch</span></span>
+            <span className="credit">
+              {t("foot.by")}{" "}
+              <a href="https://amoxtli.tech" target="_blank" rel="noopener" translate="no" className="notranslate">AMOXTLI®</a>
+            </span>
+          </div>
           <LangSwitch />
         </div>
       </div>

@@ -484,3 +484,8 @@ footer .lang button[aria-pressed="true"]{color:var(--ink)}
 .grad-text{padding:0 .1em;margin:0 -.1em}
 .has-gsap.hz .big{padding-right:.12em;margin-right:-.12em}
 .wordmark .ch.g{padding-right:.08em;margin-right:-.08em}
+/* studio credit */
+.foot .legal{display:flex;flex-wrap:wrap;align-items:center;gap:var(--s1) var(--s4)}
+.credit a{color:#C9D3DD;font-weight:600;text-decoration:none;background:linear-gradient(currentColor,currentColor) 0 100%/0 1px no-repeat;transition:background-size .4s var(--ease),color .3s}
+.credit a:hover{color:#fff;background-size:100% 1px}
+
